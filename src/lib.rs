@@ -1,3 +1,5 @@
+#![allow(non_camel_case_types)]
+
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct rsinfo {
     cfg:    cfg::cfg_info,

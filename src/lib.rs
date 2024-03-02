@@ -5,7 +5,7 @@ pub struct rsinfo {
 }
 
 pub const ALL_INFO: rsinfo = all_info();
-pub const all_info() -> rsinfo {
+pub const fn all_info() -> rsinfo {
     rsinfo {
         cfg:    cfg::ALL_INFO,
         vergen: vergen::ALL_INFO,
@@ -13,16 +13,16 @@ pub const all_info() -> rsinfo {
 }
 
 pub mod cfg {
-    pub use target_arch::cfg_target_arch_info;
-    pub use target_feature::cfg_target_feature_info;
-    pub use target_os::cfg_target_os_info;
-    pub use target_family::cfg_target_family_info;
-    pub use target_env::cfg_target_env_info;
-    pub use target_endian::cfg_target_endian_info;
-    pub use target_pointer_width::cfg_target_pointer_width_info;
-    pub use target_has_atomic::cfg_target_has_atomic_info;
-    pub use target_vendor::cfg_target_vendor_info;
-    pub use panic::cfg_panic_info;
+    pub use self::target_arch::cfg_target_arch_info;
+    pub use self::target_feature::cfg_target_feature_info;
+    pub use self::target_os::cfg_target_os_info;
+    pub use self::target_family::cfg_target_family_info;
+    pub use self::target_env::cfg_target_env_info;
+    pub use self::target_endian::cfg_target_endian_info;
+    pub use self::target_pointer_width::cfg_target_pointer_width_info;
+    pub use self::target_has_atomic::cfg_target_has_atomic_info;
+    pub use self::target_vendor::cfg_target_vendor_info;
+    pub use self::panic::cfg_panic_info;
 
     #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
     pub struct cfg_info {
@@ -330,41 +330,41 @@ pub mod cfg {
 pub mod vergen {
     #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
     pub struct vergen_info {
-        pub build_date:      Option<&'static str>,
-        pub build_timestamp: Option<&'static str>,
+        pub build_date:      &'static str,
+        pub build_timestamp: &'static str,
 
-        pub git_sha:                 Option<&'static str>,
-        pub git_branch:              Option<&'static str>,
-        pub git_commit_author_email: Option<&'static str>,
-        pub git_commit_author_name:  Option<&'static str>,
-        pub git_commit_count:        Option<&'static str>,
-        pub git_commit_date:         Option<&'static str>,
-        pub git_commit_message:      Option<&'static str>,
-        pub git_commit_timestamp:    Option<&'static str>,
-        pub git_describe:            Option<&'static str>,
+        pub git_sha:                 &'static str,
+        pub git_branch:              &'static str,
+        pub git_commit_author_email: &'static str,
+        pub git_commit_author_name:  &'static str,
+        pub git_commit_count:        &'static str,
+        pub git_commit_date:         &'static str,
+        pub git_commit_message:      &'static str,
+        pub git_commit_timestamp:    &'static str,
+        pub git_describe:            &'static str,
 
-        pub cargo_opt_level:     Option<&'static str>,
-        pub cargo_features:      Option<&'static str>,
-        pub cargo_debug:         Option<&'static str>,
-        pub cargo_target_triple: Option<&'static str>,
+        pub cargo_opt_level:     &'static str,
+        pub cargo_features:      &'static str,
+        pub cargo_debug:         &'static str,
+        pub cargo_target_triple: &'static str,
 
-        pub rustc_channel:       Option<&'static str>,
-        pub rustc_commit_date:   Option<&'static str>,
-        pub rustc_commit_hash:   Option<&'static str>,
-        pub rustc_llvm_version:  Option<&'static str>,
-        pub rustc_semver:        Option<&'static str>,
-        pub rustc_host_triple:   Option<&'static str>,
-        pub rustc_target_triple: Option<&'static str>,
+        pub rustc_channel:       &'static str,
+        pub rustc_commit_date:   &'static str,
+        pub rustc_commit_hash:   &'static str,
+        pub rustc_llvm_version:  &'static str,
+        pub rustc_semver:        &'static str,
+        pub rustc_host_triple:   &'static str,
+        pub rustc_target_triple: &'static str,
 
-        pub sysinfo_name:           Option<&'static str>,
-        pub sysinfo_os_version:     Option<&'static str>,
-        pub sysinfo_user:           Option<&'static str>,
-        pub sysinfo_total_memory:   Option<&'static str>,
-        pub sysinfo_cpu_vendor:     Option<&'static str>,
-        pub sysinfo_cpu_core_count: Option<&'static str>,
-        pub sysinfo_cpu_name:       Option<&'static str>,
-        pub sysinfo_cpu_brand:      Option<&'static str>,
-        pub sysinfo_cpu_frequency:  Option<&'static str>,
+        pub sysinfo_name:           &'static str,
+        pub sysinfo_os_version:     &'static str,
+        pub sysinfo_user:           &'static str,
+        pub sysinfo_total_memory:   &'static str,
+        pub sysinfo_cpu_vendor:     &'static str,
+        pub sysinfo_cpu_core_count: &'static str,
+        pub sysinfo_cpu_name:       &'static str,
+        pub sysinfo_cpu_brand:      &'static str,
+        pub sysinfo_cpu_frequency:  &'static str,
     }
     pub const ALL_INFO: vergen_info = all_info();
     pub const fn all_info() -> vergen_info {
@@ -407,40 +407,49 @@ pub mod vergen {
         }
     }
 
-    pub const BUILD_DATE:      Option<&'static str> = option_env!("VERGEN_BUILD_DATE");
-    pub const BUILD_TIMESTAMP: Option<&'static str> = option_env!("VERGEN_BUILD_TIMESTAMP");
+    macro_rules! get_env {
+        ($k:tt) => {
+            match option_env!($k) {
+                Some(v) => v,
+                None    => "",
+            }
+        }
+    }
 
-    pub const GIT_SHA:                 Option<&'static str> = option_env!("VERGEN_GIT_SHA");
-    pub const GIT_BRANCH:              Option<&'static str> = option_env!("VERGEN_GIT_BRANCH");
-    pub const GIT_COMMIT_AUTHOR_EMAIL: Option<&'static str> = option_env!("VERGEN_GIT_COMMIT_AUTHOR_EMAIL");
-    pub const GIT_COMMIT_AUTHOR_NAME:  Option<&'static str> = option_env!("VERGEN_GIT_COMMIT_AUTHOR_NAME");
-    pub const GIT_COMMIT_COUNT:        Option<&'static str> = option_env!("VERGEN_GIT_COMMIT_COUNT");
-    pub const GIT_COMMIT_DATE:         Option<&'static str> = option_env!("VERGEN_GIT_COMMIT_DATE");
-    pub const GIT_COMMIT_MESSAGE:      Option<&'static str> = option_env!("VERGEN_GIT_COMMIT_MESSAGE");
-    pub const GIT_COMMIT_TIMESTAMP:    Option<&'static str> = option_env!("VERGEN_GIT_COMMIT_TIMESTAMP");
-    pub const GIT_DESCRIBE:            Option<&'static str> = option_env!("VERGEN_GIT_DESCRIBE");
+    pub const BUILD_DATE:      &'static str = get_env!("VERGEN_BUILD_DATE");
+    pub const BUILD_TIMESTAMP: &'static str = get_env!("VERGEN_BUILD_TIMESTAMP");
 
-    pub const CARGO_OPT_LEVEL:     Option<&'static str> = option_env!("VERGEN_CARGO_OPT_LEVEL");
-    pub const CARGO_FEATURES:      Option<&'static str> = option_env!("VERGEN_CARGO_FEATURES");
-    pub const CARGO_DEBUG:         Option<&'static str> = option_env!("VERGEN_CARGO_DEBUG");
-    pub const CARGO_TARGET_TRIPLE: Option<&'static str> = option_env!("VERGEN_CARGO_TARGET_TRIPLE");
+    pub const GIT_SHA:                 &'static str = get_env!("VERGEN_GIT_SHA");
+    pub const GIT_BRANCH:              &'static str = get_env!("VERGEN_GIT_BRANCH");
+    pub const GIT_COMMIT_AUTHOR_EMAIL: &'static str = get_env!("VERGEN_GIT_COMMIT_AUTHOR_EMAIL");
+    pub const GIT_COMMIT_AUTHOR_NAME:  &'static str = get_env!("VERGEN_GIT_COMMIT_AUTHOR_NAME");
+    pub const GIT_COMMIT_COUNT:        &'static str = get_env!("VERGEN_GIT_COMMIT_COUNT");
+    pub const GIT_COMMIT_DATE:         &'static str = get_env!("VERGEN_GIT_COMMIT_DATE");
+    pub const GIT_COMMIT_MESSAGE:      &'static str = get_env!("VERGEN_GIT_COMMIT_MESSAGE");
+    pub const GIT_COMMIT_TIMESTAMP:    &'static str = get_env!("VERGEN_GIT_COMMIT_TIMESTAMP");
+    pub const GIT_DESCRIBE:            &'static str = get_env!("VERGEN_GIT_DESCRIBE");
 
-    pub const RUSTC_CHANNEL:       Option<&'static str> = option_env!("VERGEN_RUSTC_CHANNEL");
-    pub const RUSTC_COMMIT_DATE:   Option<&'static str> = option_env!("VERGEN_RUSTC_COMMIT_DATE");
-    pub const RUSTC_COMMIT_HASH:   Option<&'static str> = option_env!("VERGEN_RUSTC_COMMIT_HASH");
-    pub const RUSTC_LLVM_VERSION:  Option<&'static str> = option_env!("VERGEN_RUSTC_LLVM_VERSION");
-    pub const RUSTC_SEMVER:        Option<&'static str> = option_env!("VERGEN_RUSTC_SEMVER");
-    pub const RUSTC_HOST_TRIPLE:   Option<&'static str> = option_env!("VERGEN_RUSTC_HOST_TRIPLE");
-    pub const RUSTC_TARGET_TRIPLE: Option<&'static str> = option_env!("VERGEN_CARGO_TARGET_TRIPLE");
+    pub const CARGO_OPT_LEVEL:     &'static str = get_env!("VERGEN_CARGO_OPT_LEVEL");
+    pub const CARGO_FEATURES:      &'static str = get_env!("VERGEN_CARGO_FEATURES");
+    pub const CARGO_DEBUG:         &'static str = get_env!("VERGEN_CARGO_DEBUG");
+    pub const CARGO_TARGET_TRIPLE: &'static str = get_env!("VERGEN_CARGO_TARGET_TRIPLE");
 
-    pub const SYSINFO_NAME:           Option<&'static str> = option_env!("VERGEN_SYSINFO_NAME");
-    pub const SYSINFO_OS_VERSION:     Option<&'static str> = option_env!("VERGEN_SYSINFO_OS_VERSION");
-    pub const SYSINFO_USER:           Option<&'static str> = option_env!("VERGEN_SYSINFO_USER");
-    pub const SYSINFO_TOTAL_MEMORY:   Option<&'static str> = option_env!("VERGEN_SYSINFO_TOTAL_MEMORY");
-    pub const SYSINFO_CPU_VENDOR:     Option<&'static str> = option_env!("VERGEN_SYSINFO_CPU_VENDOR");
-    pub const SYSINFO_CPU_CORE_COUNT: Option<&'static str> = option_env!("VERGEN_SYSINFO_CPU_CORE_COUNT");
-    pub const SYSINFO_CPU_NAME:       Option<&'static str> = option_env!("VERGEN_SYSINFO_CPU_NAME");
-    pub const SYSINFO_CPU_BRAND:      Option<&'static str> = option_env!("VERGEN_SYSINFO_CPU_BRAND");
-    pub const SYSINFO_CPU_FREQUENCY:  Option<&'static str> = option_env!("VERGEN_SYSINFO_CPU_FREQUENCY");
+    pub const RUSTC_CHANNEL:       &'static str = get_env!("VERGEN_RUSTC_CHANNEL");
+    pub const RUSTC_COMMIT_DATE:   &'static str = get_env!("VERGEN_RUSTC_COMMIT_DATE");
+    pub const RUSTC_COMMIT_HASH:   &'static str = get_env!("VERGEN_RUSTC_COMMIT_HASH");
+    pub const RUSTC_LLVM_VERSION:  &'static str = get_env!("VERGEN_RUSTC_LLVM_VERSION");
+    pub const RUSTC_SEMVER:        &'static str = get_env!("VERGEN_RUSTC_SEMVER");
+    pub const RUSTC_HOST_TRIPLE:   &'static str = get_env!("VERGEN_RUSTC_HOST_TRIPLE");
+    pub const RUSTC_TARGET_TRIPLE: &'static str = get_env!("VERGEN_CARGO_TARGET_TRIPLE");
+
+    pub const SYSINFO_NAME:           &'static str = get_env!("VERGEN_SYSINFO_NAME");
+    pub const SYSINFO_OS_VERSION:     &'static str = get_env!("VERGEN_SYSINFO_OS_VERSION");
+    pub const SYSINFO_USER:           &'static str = get_env!("VERGEN_SYSINFO_USER");
+    pub const SYSINFO_TOTAL_MEMORY:   &'static str = get_env!("VERGEN_SYSINFO_TOTAL_MEMORY");
+    pub const SYSINFO_CPU_VENDOR:     &'static str = get_env!("VERGEN_SYSINFO_CPU_VENDOR");
+    pub const SYSINFO_CPU_CORE_COUNT: &'static str = get_env!("VERGEN_SYSINFO_CPU_CORE_COUNT");
+    pub const SYSINFO_CPU_NAME:       &'static str = get_env!("VERGEN_SYSINFO_CPU_NAME");
+    pub const SYSINFO_CPU_BRAND:      &'static str = get_env!("VERGEN_SYSINFO_CPU_BRAND");
+    pub const SYSINFO_CPU_FREQUENCY:  &'static str = get_env!("VERGEN_SYSINFO_CPU_FREQUENCY");
 }
 

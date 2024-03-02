@@ -1,11 +1,24 @@
 [package]
 name = "rsinfo"
 version = "0.1.0"
+edition = "2021"
 repository = "https://github.com/delta4chat/rsinfo"
 license = "Apache-2.0"
 description = "Add `vergen` to your [build-dependencies], then get all build info in single struct."
 documentation = "https://docs.rs/rsinfo"
 
+[features]
+default  = []
+
+vergen          = ["dep:vergen"]
+vergen-build    = ["vergen"]
+vergen-cargo    = ["vergen"]
+vergen-git      = ["vergen"]
+vergen-gitoxide = ["vergen"]
+vergen-rustc    = ["vergen"]
+vergen-si       = ["vergen"]
+vergen-all      = ["vergen-build", "vergen-cargo", "vergen-git", "vergen-gitoxide", "vergen-rustc", "vergen-si"]
+
 [build-dependencies]
-vergen = { version = "8.3.1", features = ["build", "cargo", "git", "gitoxide", "rustc", "si"] }
+vergen = { optional = true, version = "8.3.1", features = ["build", "cargo", "git", "gitoxide", "rustc", "si"] }
 

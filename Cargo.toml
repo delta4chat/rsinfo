@@ -27,3 +27,6 @@ name = "rsinfo"
 path = "src/main.rs"
 required-features = ["vergen-all"]
 
+[dependencies]
+serde_json = { version = "1.0.114", default-features = false, optional = true, features = ["alloc"] }
+

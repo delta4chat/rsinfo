@@ -66,8 +66,13 @@ fn list_of_source_code(env: &HashMap<String, String>) {
     .expect("cannot get list of source code");
 
     let mut len: usize = 0;
-    for entry in src_iter {
-        let p = entry.expect("failed to listing source code").path();
+    for maybe_entry in src_iter {
+        let entry = maybe_entry.expect("failed to listing source code");
+        if entry.file_type().expect("cannot get file type").is_dir() {
+            continue;
+        }
+
+        let p = entry.path();
         let p =
             std::fs::canonicalize(p).unwrap();
 

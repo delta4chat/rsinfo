@@ -26,4 +26,15 @@ pub const fn all_info() -> cfg_target_vendor_info {
         unknown: UNKNOWN,
     }
 }
+#[cfg(feature = "json")]
+impl cfg_target_vendor_info {
+    pub fn to_json(&self) -> serde_json::Value {
+        serde_json::json!({
+            "pc": self.pc,
+            "apple": self.apple,
+            "fortanix": self.fortanix,
+            "unknown": self.unknown,
+        })
+    }
+}
 // [ANCHOR ENDED] CONST-TO-STRUCT.PY //

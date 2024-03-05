@@ -20,4 +20,13 @@ pub const fn all_info() -> cfg_panic_info {
         abort: ABORT,
     }
 }
+#[cfg(feature = "json")]
+impl cfg_panic_info {
+    pub fn to_json(&self) -> serde_json::Value {
+        serde_json::json!({
+            "unwind": self.unwind,
+            "abort": self.abort,
+        })
+    }
+}
 // [ANCHOR ENDED] CONST-TO-STRUCT.PY //

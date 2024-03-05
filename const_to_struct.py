@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 import os
 import subprocess
 
@@ -44,10 +45,23 @@ def single_mod(f):
             return line
 
     info_struct_name = '%s_info' % m
-    info_struct = '#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]\npub struct %s {\n' % info_struct_name
+    info_struct = '\n'.join([
+        '#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]',
+        'pub struct %s {' % info_struct_name,
+    ]) + '\n'
 
-    all_info_fn =  'pub const fn all_info() -> %s {\n' % info_struct_name
-    all_info_fn += '    %s {\n' % info_struct_name
+    all_info_fn = '\n'.join([
+        'pub const fn all_info() -> %s {' % info_struct_name,
+        '    %s {' % info_struct_name,
+    ]) + '\n'
+
+    all_info_json_impl = '\n'.join([
+        '#[cfg(feature = "json")]',
+        'impl %s {' % info_struct_name,
+        '    pub fn to_json(&self) -> serde_json::Value {',
+        '        serde_json::json!({',
+    ]) + '\n'
+
     while len(get_line()) > 0:
         if 'pub const' in line and ':' in line and '=' in line:
             line = line.strip()
@@ -71,18 +85,21 @@ def single_mod(f):
                 line = line[10:]
             
             words = line.split(':')
-            name = words[0].strip()
+            const_name = words[0].strip()
+            lower_name = const_name.lower()
             type = words[1].strip()
 
-            info_struct += '    pub %s: %s,\n' % (name.lower(), type)
-            all_info_fn += '        %s: %s,\n' % (name.lower(), name)
+            info_struct += '    pub %s: %s,\n' % (lower_name, type)
+            all_info_fn += '        %s: %s,\n' % (lower_name, const_name)
+            all_info_json_impl += '            "%s": self.%s,\n' % (lower_name, lower_name)
 
     info_struct += '}\n'
     all_info_fn += '    }\n}\n'
+    all_info_json_impl += '        })\n    }\n}\n'
 
     all_info = 'pub const ALL_INFO: %s = all_info();\n' % info_struct_name
     
-    out = info_struct + all_info + all_info_fn
+    out = info_struct + all_info + all_info_fn + all_info_json_impl
     prefix = '''%s
 
 /*
@@ -117,6 +134,10 @@ def update_rs(f, code):
         new += ANCHOR_ENDED
         new += orig[ended:]
 
+    if conf['dry_run']:
+        print(code)
+        return
+
     open(f, 'w').write(new)
 
 def run():
@@ -128,7 +149,17 @@ def run():
         except SyntaxError as e:
             print(repr(e))
 
+conf = {
+        'dry_run': False
+        }
 def main():
+    try:
+        if len(sys.argv[1])>0:
+            conf['dry_run'] = True
+            return run()
+    except IndexError:
+        pass
+
     p = subprocess.Popen(
             ['git', 'show', '-q'],
             stdin=subprocess.DEVNULL,

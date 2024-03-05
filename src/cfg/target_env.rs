@@ -26,4 +26,15 @@ pub const fn all_info() -> cfg_target_env_info {
         msvc: MSVC,
     }
 }
+#[cfg(feature = "json")]
+impl cfg_target_env_info {
+    pub fn to_json(&self) -> serde_json::Value {
+        serde_json::json!({
+            "gnu": self.gnu,
+            "musl": self.musl,
+            "sgx": self.sgx,
+            "msvc": self.msvc,
+        })
+    }
+}
 // [ANCHOR ENDED] CONST-TO-STRUCT.PY //

@@ -35,4 +35,18 @@ pub const fn all_info() -> cfg_target_feature_info {
         sse_4_1: SSE_4_1,
     }
 }
+#[cfg(feature = "json")]
+impl cfg_target_feature_info {
+    pub fn to_json(&self) -> serde_json::Value {
+        serde_json::json!({
+            "avx": self.avx,
+            "avx2": self.avx2,
+            "crt_static": self.crt_static,
+            "rdrand": self.rdrand,
+            "sse": self.sse,
+            "sse_2": self.sse_2,
+            "sse_4_1": self.sse_4_1,
+        })
+    }
+}
 // [ANCHOR ENDED] CONST-TO-STRUCT.PY //

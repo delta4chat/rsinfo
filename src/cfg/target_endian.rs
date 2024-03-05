@@ -20,4 +20,13 @@ pub const fn all_info() -> cfg_target_endian_info {
         big: BIG,
     }
 }
+#[cfg(feature = "json")]
+impl cfg_target_endian_info {
+    pub fn to_json(&self) -> serde_json::Value {
+        serde_json::json!({
+            "little": self.little,
+            "big": self.big,
+        })
+    }
+}
 // [ANCHOR ENDED] CONST-TO-STRUCT.PY //

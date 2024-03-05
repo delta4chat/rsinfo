@@ -23,4 +23,14 @@ pub const fn all_info() -> cfg_target_pointer_width_info {
         _16: _16,
     }
 }
+#[cfg(feature = "json")]
+impl cfg_target_pointer_width_info {
+    pub fn to_json(&self) -> serde_json::Value {
+        serde_json::json!({
+            "_64": self._64,
+            "_32": self._32,
+            "_16": self._16,
+        })
+    }
+}
 // [ANCHOR ENDED] CONST-TO-STRUCT.PY //

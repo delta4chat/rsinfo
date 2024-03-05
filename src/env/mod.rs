@@ -83,4 +83,31 @@ pub const fn all_info() -> env_info {
         libpath: LIBPATH,
     }
 }
+#[cfg(feature = "json")]
+impl env_info {
+    pub fn to_json(&self) -> serde_json::Value {
+        serde_json::json!({
+            "cargo": self.cargo,
+            "rustc": self.rustc,
+            "rustflags": self.rustflags,
+            "cc": self.cc,
+            "cflags": self.cflags,
+            "path": self.path,
+            "pwd": self.pwd,
+            "home": self.home,
+            "shell": self.shell,
+            "user": self.user,
+            "prefix": self.prefix,
+            "tmpdir": self.tmpdir,
+            "ld_preload": self.ld_preload,
+            "ld_library_path": self.ld_library_path,
+            "term": self.term,
+            "colorterm": self.colorterm,
+            "android_root": self.android_root,
+            "dex2oatbootclasspath": self.dex2oatbootclasspath,
+            "dyld_fallback_library_path": self.dyld_fallback_library_path,
+            "libpath": self.libpath,
+        })
+    }
+}
 // [ANCHOR ENDED] CONST-TO-STRUCT.PY //

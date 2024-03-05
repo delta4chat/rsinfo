@@ -35,4 +35,18 @@ pub const fn all_info() -> cfg_target_arch_info {
         aarch64: AARCH64,
     }
 }
+#[cfg(feature = "json")]
+impl cfg_target_arch_info {
+    pub fn to_json(&self) -> serde_json::Value {
+        serde_json::json!({
+            "x86": self.x86,
+            "x86_64": self.x86_64,
+            "mips": self.mips,
+            "powerpc": self.powerpc,
+            "powerpc64": self.powerpc64,
+            "arm": self.arm,
+            "aarch64": self.aarch64,
+        })
+    }
+}
 // [ANCHOR ENDED] CONST-TO-STRUCT.PY //

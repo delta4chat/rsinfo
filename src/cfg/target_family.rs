@@ -23,4 +23,14 @@ pub const fn all_info() -> cfg_target_family_info {
         wasm: WASM,
     }
 }
+#[cfg(feature = "json")]
+impl cfg_target_family_info {
+    pub fn to_json(&self) -> serde_json::Value {
+        serde_json::json!({
+            "unix": self.unix,
+            "windows": self.windows,
+            "wasm": self.wasm,
+        })
+    }
+}
 // [ANCHOR ENDED] CONST-TO-STRUCT.PY //

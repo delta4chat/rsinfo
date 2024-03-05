@@ -32,4 +32,17 @@ pub const fn all_info() -> cfg_target_has_atomic_info {
         ptr: PTR,
     }
 }
+#[cfg(feature = "json")]
+impl cfg_target_has_atomic_info {
+    pub fn to_json(&self) -> serde_json::Value {
+        serde_json::json!({
+            "_8": self._8,
+            "_16": self._16,
+            "_32": self._32,
+            "_64": self._64,
+            "_128": self._128,
+            "ptr": self.ptr,
+        })
+    }
+}
 // [ANCHOR ENDED] CONST-TO-STRUCT.PY //

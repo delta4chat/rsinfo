@@ -8,10 +8,8 @@ description = "Add `vergen` to your [build-dependencies], then get all build inf
 documentation = "https://docs.rs/rsinfo"
 
 [features]
-default  = [ "serde" ]
-
-serde = ["dep:serde"]
-json  = ["dep:serde_json"]
+default  = [ "json" ]
+json = ["dep:serde_json"]
 
 vergen          = ["dep:vergen"]
 vergen-build    = ["vergen"]
@@ -26,11 +24,11 @@ vergen-all      = ["vergen-build", "vergen-cargo", "vergen-git", "vergen-gitoxid
 vergen = { optional = true, version = "8.3.1", features = ["build", "cargo", "git", "gitoxide", "rustc", "si"] }
 
 [dependencies]
-serde      = { version = "1.0.197", optional = true, features = ["alloc", "derive"], default-features = false }
 serde_json = { version = "1.0.114", optional = true, features = ["alloc"], default-features = false }
 
 [[bin]]
 name = "rsinfo"
 path = "src/main.rs"
-required-features = ["vergen-all"]
+#required-features = ["vergen-all"]
+
 

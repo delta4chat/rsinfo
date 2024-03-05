@@ -44,4 +44,20 @@ pub const fn all_info() -> cfg_target_os_info {
         none: NONE,
     }
 }
+#[cfg(feature = "json")]
+impl cfg_target_os_info {
+    pub fn to_json(&self) -> serde_json::Value {
+        serde_json::json!({
+            "linux": self.linux,
+            "windows": self.windows,
+            "macos": self.macos,
+            "android": self.android,
+            "ios": self.ios,
+            "freebsd": self.freebsd,
+            "dragonfly": self.dragonfly,
+            "openbsd": self.openbsd,
+            "none": self.none,
+        })
+    }
+}
 // [ANCHOR ENDED] CONST-TO-STRUCT.PY //

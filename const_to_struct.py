@@ -17,13 +17,16 @@ def walk_mod(walk=os.walk, path='src'):
 # @return  = String of Rust Code
 def single_mod(f):
     m = os.path.basename(f)
+    is_mod = False
     if 'mod.rs' in m:
+        is_mod = True
         m = os.path.basename(os.path.dirname(f))
 
     if m.endswith('.rs'):
         m = m[:-3]
     if '/cfg/' in f.replace('\\', '/'):
-        m = 'cfg_' + m
+        if not is_mod:
+            m = 'cfg_' + m
 
     code = ''
     with open(f, 'r') as fo:
@@ -67,7 +70,7 @@ def single_mod(f):
             line = line.strip()
 
             skip = False
-            for ex in ('pub fn', 'all_info', 'ALL_INFO', '/*', '*/', '//', '{', '}', ','):
+            for ex in ('pub fn all_info', 'pub const ALL_INFO', '/*', '*/', '//', '{', '}', ','):
                 if ex in line:
                     skip = True
                     break
@@ -91,7 +94,11 @@ def single_mod(f):
 
             info_struct += '    pub %s: %s,\n' % (lower_name, type)
             all_info_fn += '        %s: %s,\n' % (lower_name, const_name)
-            all_info_json_impl += '            "%s": self.%s,\n' % (lower_name, lower_name)
+
+            cal = ''
+            if type.endswith('_info'):
+                cal = '.to_json()'
+            all_info_json_impl += '            "%s": self.%s,\n' % (lower_name, lower_name+cal)
 
     info_struct += '}\n'
     all_info_fn += '    }\n}\n'

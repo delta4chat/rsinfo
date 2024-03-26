@@ -11,6 +11,23 @@ macro_rules! get_env {
     }
 }
 
+/// Compile info obtained by `cfg!()`, the compile-time attribute values provided by Rust compiler.
+pub mod cfg;
+pub use cfg::cfg_info;
+
+/// build info collects by [Vergen](https://docs.rs/vergen).
+pub mod vergen;
+
+/// Environment variables set by Cargo package manager.
+pub mod cargo;
+
+/// Other info get from environment variables.
+/// this is very platform-specified.
+pub mod env;
+
+/// source code info
+pub mod source;
+
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 pub struct rsinfo {
     cfg:    cfg::cfg_info,
@@ -19,6 +36,20 @@ pub struct rsinfo {
     env:    env::env_info,
 
     source:    [&'static str; source::SOURCE_CODE_LIST_LEN],
+}
+#[cfg(feature = "json")]
+impl rsinfo {
+    pub fn to_json(&self) -> serde_json::Value {
+        serde_json::json!({
+            "rsinfo": option_env!("CARGO_PKG_VERSION").unwrap_or("(N/A)"),
+            "data": {
+                "cfg": self.cfg.to_json(),
+                "vergen": self.vergen.to_json(),
+                "cargo": self.cargo.to_json(),
+                "env": self.env.to_json(),
+            },
+        })
+    }
 }
 impl core::fmt::Debug for rsinfo {
     fn fmt(&self, f: &mut core::fmt::Formatter)
@@ -43,20 +74,3 @@ pub const fn all_info() -> rsinfo {
         source:    source::SOURCE_CODE_LIST,
     }
 }
-
-/// Compile info obtained by `cfg!()`, the compile-time attribute values provided by Rust compiler.
-pub mod cfg;
-pub use cfg::cfg_info;
-
-/// build info collects by [Vergen](https://docs.rs/vergen).
-pub mod vergen;
-
-/// Environment variables set by Cargo package manager.
-pub mod cargo;
-
-/// Other info get from environment variables.
-/// this is very platform-specified.
-pub mod env;
-
-/// source code info
-pub mod source;

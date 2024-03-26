@@ -1,3 +1,4 @@
 fn main() {
-    println!("{:#?}", rsinfo::ALL_INFO);
+    eprintln!("{:#?}", rsinfo::ALL_INFO);
+    println!("{:#}", rsinfo::ALL_INFO.to_json())
 }

@@ -1,4 +1,5 @@
 fn main() {
-    eprintln!("{:#?}", rsinfo::ALL_INFO);
-    println!("{:#}", rsinfo::ALL_INFO.to_json())
+    let info = rsinfo::all_info();
+    eprintln!("{:#?}", info);
+    println!("{:#}", info.to_json())
 }

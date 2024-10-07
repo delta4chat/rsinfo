@@ -1,46 +1,40 @@
+use std::sync::LazyLock;
 
-pub const BUILD_DATE:      &'static str = get_env!("VERGEN_BUILD_DATE");
-pub const BUILD_TIMESTAMP: &'static str = get_env!("VERGEN_BUILD_TIMESTAMP");
+pub static BUILD_DATE:              LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_BUILD_DATE") });
+pub static BUILD_TIMESTAMP:         LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_BUILD_TIMESTAMP") });
 
-pub const GIT_SHA:                 &'static str = get_env!("VERGEN_GIT_SHA");
-pub const GIT_BRANCH:              &'static str = get_env!("VERGEN_GIT_BRANCH");
-pub const GIT_COMMIT_AUTHOR_EMAIL: &'static str = get_env!("VERGEN_GIT_COMMIT_AUTHOR_EMAIL");
-pub const GIT_COMMIT_AUTHOR_NAME:  &'static str = get_env!("VERGEN_GIT_COMMIT_AUTHOR_NAME");
-pub const GIT_COMMIT_COUNT:        &'static str = get_env!("VERGEN_GIT_COMMIT_COUNT");
-pub const GIT_COMMIT_DATE:         &'static str = get_env!("VERGEN_GIT_COMMIT_DATE");
-pub const GIT_COMMIT_MESSAGE:      &'static str = get_env!("VERGEN_GIT_COMMIT_MESSAGE");
-pub const GIT_COMMIT_TIMESTAMP:    &'static str = get_env!("VERGEN_GIT_COMMIT_TIMESTAMP");
-pub const GIT_DESCRIBE:            &'static str = get_env!("VERGEN_GIT_DESCRIBE");
+pub static GIT_SHA:                 LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_GIT_SHA") });
+pub static GIT_BRANCH:              LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_GIT_BRANCH") });
+pub static GIT_COMMIT_AUTHOR_EMAIL: LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_GIT_COMMIT_AUTHOR_EMAIL") });
+pub static GIT_COMMIT_AUTHOR_NAME:  LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_GIT_COMMIT_AUTHOR_NAME") });
+pub static GIT_COMMIT_COUNT:        LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_GIT_COMMIT_COUNT") });
+pub static GIT_COMMIT_DATE:         LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_GIT_COMMIT_DATE") });
+pub static GIT_COMMIT_MESSAGE:      LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_GIT_COMMIT_MESSAGE") });
+pub static GIT_COMMIT_TIMESTAMP:    LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_GIT_COMMIT_TIMESTAMP") });
+pub static GIT_DESCRIBE:            LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_GIT_DESCRIBE") });
 
-pub const CARGO_OPT_LEVEL:     &'static str = get_env!("VERGEN_CARGO_OPT_LEVEL");
-pub const CARGO_FEATURES:      &'static str = get_env!("VERGEN_CARGO_FEATURES");
-pub const CARGO_DEBUG:         &'static str = get_env!("VERGEN_CARGO_DEBUG");
-pub const CARGO_TARGET_TRIPLE: &'static str = get_env!("VERGEN_CARGO_TARGET_TRIPLE");
+pub static CARGO_OPT_LEVEL:     LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_CARGO_OPT_LEVEL") });
+pub static CARGO_FEATURES:      LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_CARGO_FEATURES") });
+pub static CARGO_DEBUG:         LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_CARGO_DEBUG") });
+pub static CARGO_TARGET_TRIPLE: LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_CARGO_TARGET_TRIPLE") });
 
-pub const RUSTC_CHANNEL:       &'static str = get_env!("VERGEN_RUSTC_CHANNEL");
-pub const RUSTC_COMMIT_DATE:   &'static str = get_env!("VERGEN_RUSTC_COMMIT_DATE");
-pub const RUSTC_COMMIT_HASH:   &'static str = get_env!("VERGEN_RUSTC_COMMIT_HASH");
-pub const RUSTC_LLVM_VERSION:  &'static str = get_env!("VERGEN_RUSTC_LLVM_VERSION");
-pub const RUSTC_SEMVER:        &'static str = get_env!("VERGEN_RUSTC_SEMVER");
-pub const RUSTC_HOST_TRIPLE:   &'static str = get_env!("VERGEN_RUSTC_HOST_TRIPLE");
-pub const RUSTC_TARGET_TRIPLE: &'static str = get_env!("VERGEN_CARGO_TARGET_TRIPLE");
+pub static RUSTC_CHANNEL:       LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_RUSTC_CHANNEL") });
+pub static RUSTC_COMMIT_DATE:   LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_RUSTC_COMMIT_DATE") });
+pub static RUSTC_COMMIT_HASH:   LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_RUSTC_COMMIT_HASH") });
+pub static RUSTC_LLVM_VERSION:  LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_RUSTC_LLVM_VERSION") });
+pub static RUSTC_SEMVER:        LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_RUSTC_SEMVER") });
+pub static RUSTC_HOST_TRIPLE:   LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_RUSTC_HOST_TRIPLE") });
+pub static RUSTC_TARGET_TRIPLE: LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_CARGO_TARGET_TRIPLE") });
 
-pub const SYSINFO_NAME:           &'static str = get_env!("VERGEN_SYSINFO_NAME");
-pub const SYSINFO_OS_VERSION:     &'static str = get_env!("VERGEN_SYSINFO_OS_VERSION");
-pub const SYSINFO_USER:           &'static str = get_env!("VERGEN_SYSINFO_USER");
-pub const SYSINFO_TOTAL_MEMORY:   &'static str = get_env!("VERGEN_SYSINFO_TOTAL_MEMORY");
-pub const SYSINFO_CPU_VENDOR:     &'static str = get_env!("VERGEN_SYSINFO_CPU_VENDOR");
-pub const SYSINFO_CPU_CORE_COUNT: &'static str = get_env!("VERGEN_SYSINFO_CPU_CORE_COUNT");
-pub const SYSINFO_CPU_NAME:       &'static str = get_env!("VERGEN_SYSINFO_CPU_NAME");
-pub const SYSINFO_CPU_BRAND:      &'static str = get_env!("VERGEN_SYSINFO_CPU_BRAND");
-pub const SYSINFO_CPU_FREQUENCY:  &'static str = get_env!("VERGEN_SYSINFO_CPU_FREQUENCY");
-
-// [ANCHOR START] CONST-TO-STRUCT.PY //
-
-/*
- * the following source code is automatic generated by const-to-struct.py
- * DO NOT EDIT.
-*/
+pub static SYSINFO_NAME:           LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_SYSINFO_NAME") });
+pub static SYSINFO_OS_VERSION:     LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_SYSINFO_OS_VERSION") });
+pub static SYSINFO_USER:           LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_SYSINFO_USER") });
+pub static SYSINFO_TOTAL_MEMORY:   LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_SYSINFO_TOTAL_MEMORY") });
+pub static SYSINFO_CPU_VENDOR:     LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_SYSINFO_CPU_VENDOR") });
+pub static SYSINFO_CPU_CORE_COUNT: LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_SYSINFO_CPU_CORE_COUNT") });
+pub static SYSINFO_CPU_NAME:       LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_SYSINFO_CPU_NAME") });
+pub static SYSINFO_CPU_BRAND:      LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_SYSINFO_CPU_BRAND") });
+pub static SYSINFO_CPU_FREQUENCY:  LazyLock<&'static str> = LazyLock::new(||{ get_env!("VERGEN_SYSINFO_CPU_FREQUENCY") });
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct vergen_info {
@@ -76,40 +70,39 @@ pub struct vergen_info {
     pub sysinfo_cpu_brand: &'static str,
     pub sysinfo_cpu_frequency: &'static str,
 }
-pub const ALL_INFO: vergen_info = all_info();
-pub const fn all_info() -> vergen_info {
+pub fn all_info() -> vergen_info {
     vergen_info {
-        build_date: BUILD_DATE,
-        build_timestamp: BUILD_TIMESTAMP,
-        git_sha: GIT_SHA,
-        git_branch: GIT_BRANCH,
-        git_commit_author_email: GIT_COMMIT_AUTHOR_EMAIL,
-        git_commit_author_name: GIT_COMMIT_AUTHOR_NAME,
-        git_commit_count: GIT_COMMIT_COUNT,
-        git_commit_date: GIT_COMMIT_DATE,
-        git_commit_message: GIT_COMMIT_MESSAGE,
-        git_commit_timestamp: GIT_COMMIT_TIMESTAMP,
-        git_describe: GIT_DESCRIBE,
-        cargo_opt_level: CARGO_OPT_LEVEL,
-        cargo_features: CARGO_FEATURES,
-        cargo_debug: CARGO_DEBUG,
-        cargo_target_triple: CARGO_TARGET_TRIPLE,
-        rustc_channel: RUSTC_CHANNEL,
-        rustc_commit_date: RUSTC_COMMIT_DATE,
-        rustc_commit_hash: RUSTC_COMMIT_HASH,
-        rustc_llvm_version: RUSTC_LLVM_VERSION,
-        rustc_semver: RUSTC_SEMVER,
-        rustc_host_triple: RUSTC_HOST_TRIPLE,
-        rustc_target_triple: RUSTC_TARGET_TRIPLE,
-        sysinfo_name: SYSINFO_NAME,
-        sysinfo_os_version: SYSINFO_OS_VERSION,
-        sysinfo_user: SYSINFO_USER,
-        sysinfo_total_memory: SYSINFO_TOTAL_MEMORY,
-        sysinfo_cpu_vendor: SYSINFO_CPU_VENDOR,
-        sysinfo_cpu_core_count: SYSINFO_CPU_CORE_COUNT,
-        sysinfo_cpu_name: SYSINFO_CPU_NAME,
-        sysinfo_cpu_brand: SYSINFO_CPU_BRAND,
-        sysinfo_cpu_frequency: SYSINFO_CPU_FREQUENCY,
+        build_date: &BUILD_DATE,
+        build_timestamp: &BUILD_TIMESTAMP,
+        git_sha: &GIT_SHA,
+        git_branch: &GIT_BRANCH,
+        git_commit_author_email: &GIT_COMMIT_AUTHOR_EMAIL,
+        git_commit_author_name: &GIT_COMMIT_AUTHOR_NAME,
+        git_commit_count: &GIT_COMMIT_COUNT,
+        git_commit_date: &GIT_COMMIT_DATE,
+        git_commit_message: &GIT_COMMIT_MESSAGE,
+        git_commit_timestamp: &GIT_COMMIT_TIMESTAMP,
+        git_describe: &GIT_DESCRIBE,
+        cargo_opt_level: &CARGO_OPT_LEVEL,
+        cargo_features: &CARGO_FEATURES,
+        cargo_debug: &CARGO_DEBUG,
+        cargo_target_triple: &CARGO_TARGET_TRIPLE,
+        rustc_channel: &RUSTC_CHANNEL,
+        rustc_commit_date: &RUSTC_COMMIT_DATE,
+        rustc_commit_hash: &RUSTC_COMMIT_HASH,
+        rustc_llvm_version: &RUSTC_LLVM_VERSION,
+        rustc_semver: &RUSTC_SEMVER,
+        rustc_host_triple: &RUSTC_HOST_TRIPLE,
+        rustc_target_triple: &RUSTC_TARGET_TRIPLE,
+        sysinfo_name: &SYSINFO_NAME,
+        sysinfo_os_version: &SYSINFO_OS_VERSION,
+        sysinfo_user: &SYSINFO_USER,
+        sysinfo_total_memory: &SYSINFO_TOTAL_MEMORY,
+        sysinfo_cpu_vendor: &SYSINFO_CPU_VENDOR,
+        sysinfo_cpu_core_count: *SYSINFO_CPU_CORE_COUNT,
+        sysinfo_cpu_name: &SYSINFO_CPU_NAME,
+        sysinfo_cpu_brand: &SYSINFO_CPU_BRAND,
+        sysinfo_cpu_frequency: &SYSINFO_CPU_FREQUENCY,
     }
 }
 #[cfg(feature = "json")]
@@ -150,4 +143,4 @@ impl vergen_info {
         })
     }
 }
-// [ANCHOR ENDED] CONST-TO-STRUCT.PY //
+

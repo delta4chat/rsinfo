@@ -11,6 +11,7 @@ macro_rules! get_env {
     }
 }
 
+
 /// Compile info obtained by `cfg!()`, the compile-time attribute values provided by Rust compiler.
 pub mod cfg;
 pub use cfg::cfg_info;
@@ -25,17 +26,17 @@ pub mod cargo;
 /// this is very platform-specified.
 pub mod env;
 
-/// source code info
+/// source code info (only rsinfo itself)
 pub mod source;
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 pub struct rsinfo {
-    cfg:    cfg::cfg_info,
-    vergen: vergen::vergen_info,
-    cargo:  cargo::cargo_info,
-    env:    env::env_info,
+    pub cfg:    cfg::cfg_info,
+    pub vergen: vergen::vergen_info,
+    pub cargo:  cargo::cargo_info,
+    pub env:    env::env_info,
 
-    source:    [&'static str; source::SOURCE_CODE_LIST_LEN],
+    pub source:    &'static [(&'static str, &'static str)],
 }
 #[cfg(feature = "json")]
 impl rsinfo {
@@ -47,6 +48,7 @@ impl rsinfo {
                 "vergen": self.vergen.to_json(),
                 "cargo": self.cargo.to_json(),
                 "env": self.env.to_json(),
+                "source": serde_json::json!(self.source),
             },
         })
     }
@@ -60,17 +62,53 @@ impl core::fmt::Debug for rsinfo {
             .field("vergen", &self.vergen)
             .field("cargo", &self.cargo)
             .field("env", &self.env)
+            .field("source", &self.source)
             .finish()
     }
 }
 
-pub const ALL_INFO: rsinfo = all_info();
-pub const fn all_info() -> rsinfo {
+pub fn all_info() -> rsinfo {
     rsinfo {
         cfg:    cfg::ALL_INFO,
-        vergen: vergen::ALL_INFO,
+        vergen: vergen::all_info(),
         cargo:  cargo::ALL_INFO,
         env:    env::ALL_INFO,
-        source:    source::SOURCE_CODE_LIST,
+        source: source::SOURCE_CODE_LIST,
+    }
+}
+
+#[macro_export]
+macro_rules! vergen {
+    () => {
+        let mut b = vergen::EmitBuilder::builder();
+
+        #[cfg(feature = "vergen-build")]
+        {
+            b = *b.all_build();
+        }
+
+        #[cfg(feature = "vergen-cargo")]
+        {
+            b = *b.all_cargo();
+        }
+
+        #[cfg(feature = "vergen-git")]
+        {
+            b = *b.all_git();
+        }
+
+        #[cfg(feature = "vergen-rustc")]
+        {
+            b = *b.all_rustc();
+        }
+
+        #[cfg(feature = "vergen-si")]
+        {
+            b = *b.all_sysinfo();
+        }
+
+        if let Err(e) = b.emit() {
+            eprintln!("unable to obtain 'vergen build info': {e:?}");
+        }
     }
 }
